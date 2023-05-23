@@ -130,9 +130,7 @@ export class StateHandlerRoom extends Room<State> {
         });
 
         this.onMessage("onEntityClicked", (client, data) => {
-            client.send("playSound", {
-                soundId: "../assets/sfx/specialquack.mp3"
-            })
+            // TODO handle
         })
 
         this.onMessage("onEntityHoverEntered", (client, data) => { 

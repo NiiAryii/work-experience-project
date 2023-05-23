@@ -7,7 +7,7 @@ import express from 'express';
 // import { uWebSocketsTransport} from "@colyseus/uwebsockets-transport";
 
 // Import demo room handlers
-import { StateHandlerRoom } from "./rooms/02-state-handler";
+import { StateHandlerRoom } from "./rooms/development";
 
 export default config({
     getId: () => "Your Colyseus App",
