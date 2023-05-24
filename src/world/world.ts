@@ -2,9 +2,15 @@
 import { IWorld, addEntity, createWorld } from 'bitecs'
 import { Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
-import { Entity, Vector3 } from "./entity";
-import { Player } from "./player";
-import { HubsWorld } from './world';
+import { Entity, Vector3 } from "../model/entity";
+import { Player } from "../player/player";
+
+export interface HubsWorld extends IWorld {
+
+    entities: Map<number, Entity>;
+    time: { delta: number; elapsed: number; tick: number };
+
+}
 
 export class State extends Schema {
 
@@ -33,7 +39,6 @@ export class State extends Schema {
     createEntity(entity : Entity) {
         const eid = addEntity(this.world);
         this.world.entities.set(eid, entity);
-        entity.id = eid;
     }
 
 }

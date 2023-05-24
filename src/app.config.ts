@@ -4,30 +4,24 @@ import path from 'path';
 import serveIndex from 'serve-index';
 import express from 'express';
 
-// import { uWebSocketsTransport} from "@colyseus/uwebsockets-transport";
-
-// Import demo room handlers
 import { RoomHandler } from "./engine/room-handler";
 
 export default config({
-    getId: () => "Your Colyseus App",
+
+    getId: () => "MetaScript Server",
 
     options: {
         devMode: true,
     },
 
-    // initializeTransport: (options) => new uWebSocketsTransport(options),
-
     initializeGameServer: (gameServer) => {
 
-        // Define "state_handler" room
         gameServer.define("state_handler", RoomHandler)
             .enableRealtimeListing();
 
         gameServer.onShutdown(function(){
             console.log(`game server is going down.`);
         });
-
 
     },
 

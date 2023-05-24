@@ -3,8 +3,7 @@ import { Room, Client } from "colyseus";
 import { Entity, Vector3 } from "../model/entity";
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
-import { State } from "../model/state";
-import { HubsWorld } from '../model/world';
+import { HubsWorld, State } from "../world/world";
 
 const publicKey = fs.readFileSync('priv/reticulum.key');
 
