@@ -16,6 +16,10 @@ export class Player extends Schema {
         this.actionSender = new ActionSender(this)
     }
 
+    send(eventName : string, payload : any) {
+        this.client.send(eventName, payload);
+    }
+
     updatePosition(newPosition : Vector3) {
         this.position = newPosition;
     }

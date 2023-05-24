@@ -75,9 +75,12 @@ export class RoomHandler extends Room<WorldHandler> {
                 const hubId = decoded.hub_id;
                 const player = this.worldHandler.createPlayer(client);
                 player.accountId = decoded.account_id;
-                this.world.entities.forEach((entity) => {
-                    client.send("createEntity", entity);
-                });             
+                // currently all entities are networked so this only needs to be sent when first player joins
+                if(this.worldHandler.players.size == 1) {
+                    this.world.entities.forEach((entity) => {
+                        player.actionSender.createEntity(entity);
+                    });             
+                }
             }
         });
     }
