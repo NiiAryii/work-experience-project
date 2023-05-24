@@ -6,6 +6,7 @@ import fs from 'fs';
 
 // Read the RSA private key from a file
 const publicKey = fs.readFileSync('priv/reticulum.key');
+const entityList : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
 
 export class Player extends Schema {
 
@@ -60,75 +61,17 @@ export class StateHandlerRoom extends Room<State> {
     fixedTimeStep = 500;
     lastEntityId = 0;
 
-    spawnGlobalObjects(state : State) {
-        
-        // global entities
-        state.createEntity({
-            id: "1",
-            name: "test",
-            type: "box",
-            color: "red",
-            opacity: 0.85,
-            grabable: true,
-            position: { x: 0, y: 2, z: 0 },
-            rotation: { x: 0, y: 0, z: 0 },
-            scale: { x: 1, y: 1, z: 1 },
-            shape: {
-                width: 0.25,
-                height: 0.25,
-                depth: 0.25
-            }
-        });   
-
-        state.createEntity({
-            id: "2",
-            name: "box2",
-            type: "box",
-            color: "green",
-            opacity: 0.85,
-            grabable: true,
-            position: { x: 2, y: 2, z: 0 },
-            rotation: { x: 0, y: 0, z: 0 },
-            scale: { x: 1, y: 1, z: 1 },
-            shape: {
-                width: 0.25,
-                height: 0.25,
-                depth: 0.25
-            }
-        });   
-
-        state.createEntity({
-            id: "3",
-            name: "box",
-            type: "box",
-            color: "blue",
-            opacity: 0.85,
-            grabable: true,
-            position: { x: 4, y: 2, z: 0 },
-            rotation: { x: 0, y: 0, z: 0 },
-            scale: { x: 1, y: 1, z: 1 },
-            shape: {
-                width: 0.25,
-                height: 0.25,
-                depth: 0.25
-            }
-        });  
-
+    createGlobalEntities(state : State) {
+        entityList.forEach((e) => {
+            state.createEntity(e);
+        });
     }
 
     onCreate (options : any) {
         const state = new State()
         this.setState(state);
-
-        // fixed tick event 
-        this.setSimulationInterval((deltaTime) => {
-            this.elapsedTime += deltaTime;
-            while (this.elapsedTime >= this.fixedTimeStep) {
-                this.elapsedTime -= this.fixedTimeStep;
-                this.onTick();
-            }
-        });
-
+        this.createGlobalEntities(this.state);
+        
         this.onMessage("onEntityClicked", (client, data) => {
             // TODO handle
         })
@@ -149,7 +92,14 @@ export class StateHandlerRoom extends Room<State> {
             }
         });  
 
-        this.spawnGlobalObjects(this.state);
+        // fixed tick event 
+        this.setSimulationInterval((deltaTime) => {
+            this.elapsedTime += deltaTime;
+            while (this.elapsedTime >= this.fixedTimeStep) {
+                this.elapsedTime -= this.fixedTimeStep;
+                this.onTick();
+            }
+        });
     }
 
     onTick() {

@@ -1,0 +1,18 @@
+[
+    {
+        "id": "1",
+        "name": "test",
+        "type": "box",
+        "color": "red",
+        "opacity": 0.85,
+        "grabable": true,
+        "position": { "x" : 0, "y": 2, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 },
+        "shape": {
+            "width": 0.25,
+            "height": 0.25,
+            "depth": 0.25
+        }
+    }
+]
