@@ -13,5 +13,35 @@
             "height": 0.25,
             "depth": 0.25
         }
-    }
+    },
+    {
+        "name": "test-1",
+        "type": "box",
+        "color": "green",
+        "opacity": 0.85,
+        "grabable": true,
+        "position": { "x" : 2, "y": 2, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 },
+        "shape": {
+            "width": 0.25,
+            "height": 0.25,
+            "depth": 0.25
+        }
+    },
+    {
+        "name": "test-3",
+        "type": "box",
+        "color": "blue",
+        "opacity": 0.85,
+        "grabable": true,
+        "position": { "x" : 4, "y": 2, "z": 0 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "scale": { "x": 1, "y": 1, "z": 1 },
+        "shape": {
+            "width": 0.25,
+            "height": 0.25,
+            "depth": 0.25
+        }
+    }    
 ]

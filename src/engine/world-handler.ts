@@ -47,6 +47,7 @@ export class WorldHandler extends Schema {
 
     createEntity(entity : Entity) {
         const eid = addEntity(this.world);
+        entity.id = eid;
         this.world.entities.set(eid, entity);
     }
 
