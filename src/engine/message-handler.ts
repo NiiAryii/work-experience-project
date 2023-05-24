@@ -13,7 +13,7 @@ export default class MessageHandler {
     onEntityClicked(client : Client, data : any) {
         const player = this.worldHandler.getPlayerBySessionId(client.sessionId);
         if(player) {
-            console.log("[" + player.accountId + "]", data);
+            console.log("[" + player.accountId + "] onEntityClicked", data);
         }
     }
 

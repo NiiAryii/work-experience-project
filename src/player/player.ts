@@ -26,13 +26,13 @@ export class Player extends Schema {
     }
 
     login() {
-        console.log("[" + this.accountId + "]: entered the world")
+        console.log("[" + this.accountId + "]", "entered the world")
     }
 
     logout() {
-        console.log("[" + this.accountId + "]: left the world")
+        console.log("[" + this.accountId + "]", "left the world")
     }
-    
+
     tick() : void {
         // tick is called every 500 milliseconds
     }
