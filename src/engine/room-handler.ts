@@ -20,7 +20,7 @@ export class RoomHandler extends Room<WorldHandler> {
         this.world.entities = new Map<number, Entity>;
     }
 
-    createGlobalEntities(state : WorldHandler) {
+    loadEntities(state : WorldHandler) {
         const definitions : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
         definitions.forEach((e) => {
             state.createEntity(e);
@@ -34,7 +34,7 @@ export class RoomHandler extends Room<WorldHandler> {
 
         this.worldHandler = new WorldHandler(this.world)
         this.setState(this.worldHandler);
-        this.createGlobalEntities(this.worldHandler);
+        this.loadEntities(this.worldHandler);
         
         this.onMessage("onEntityClicked", (client, data) => {
             // TODO handle
