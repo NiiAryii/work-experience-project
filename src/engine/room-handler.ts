@@ -1,75 +1,39 @@
+import { createWorld } from 'bitecs'
 import { Room, Client } from "colyseus";
-import { Schema, type, MapSchema } from "@colyseus/schema";
 import { Entity, Vector3 } from "../model/entity";
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
+import { State } from "../model/state";
+import { HubsWorld } from '../model/world';
 
-// Read the RSA private key from a file
 const publicKey = fs.readFileSync('priv/reticulum.key');
-const entityList : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
 
-export class Player extends Schema {
+export class RoomHandler extends Room<State> {
 
-    client = null;
-
-    @type("string")
-    accountId = null;
-
-    position: Vector3 = null;
-
-    constructor(client : Client) {
-        super();
-        this.client = client;
-    }
-
-    updatePosition(newPosition : Vector3) {
-        this.position = newPosition;
-    }
-
-}
-
-export class State extends Schema {
-
-    entities = new Map<string, Entity>();
-
-    @type({ map: Player })
-    players = new MapSchema<Player>();
-    
-    @type("string")
-    hubId = null;
-
-    createPlayer(client : Client) : Player {
-        const player = new Player(client);
-        this.players.set(client.sessionId, player);
-        return player;
-    }
-  
-    removePlayer(sessionId: string) {
-        this.players.delete(sessionId);
-    }
-
-    createEntity(entity : Entity) {
-        this.entities.set(entity.id, entity);
-    }
-
-}
-
-export class StateHandlerRoom extends Room<State> {
+    world: HubsWorld = null;
+    state: State = null;
 
     maxClients = 25;
     elapsedTime = 0;
     fixedTimeStep = 500;
     lastEntityId = 0;
 
+    constructor() {
+        super();
+        this.world = createWorld();
+        this.world.entities = new Map<number, Entity>;
+    }
+
     createGlobalEntities(state : State) {
-        entityList.forEach((e) => {
+        const definitions : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
+        definitions.forEach((e) => {
             state.createEntity(e);
         });
     }
 
     onCreate (options : any) {
-        const state = new State()
-        this.setState(state);
+        this.state = new State(this.world)
+        this.setState(this.state);
         this.createGlobalEntities(this.state);
         
         this.onMessage("onEntityClicked", (client, data) => {
@@ -119,7 +83,7 @@ export class StateHandlerRoom extends Room<State> {
 
                 console.log("[" + player.accountId + "]: entered the room")
 
-                this.state.entities.forEach((entity) => {
+                this.world.entities.forEach((entity) => {
                     client.send("createEntity", entity);
                 });
 

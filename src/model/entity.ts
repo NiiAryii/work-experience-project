@@ -11,7 +11,6 @@ export type Vector3 = {
 }
 
 export type Entity = {
-  id?: string;
   name: string;
   type: string;
   color?: string;

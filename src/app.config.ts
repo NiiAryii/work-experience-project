@@ -7,7 +7,7 @@ import express from 'express';
 // import { uWebSocketsTransport} from "@colyseus/uwebsockets-transport";
 
 // Import demo room handlers
-import { StateHandlerRoom } from "./rooms/development";
+import { RoomHandler } from "./engine/room-handler";
 
 export default config({
     getId: () => "Your Colyseus App",
@@ -21,7 +21,7 @@ export default config({
     initializeGameServer: (gameServer) => {
 
         // Define "state_handler" room
-        gameServer.define("state_handler", StateHandlerRoom)
+        gameServer.define("state_handler", RoomHandler)
             .enableRealtimeListing();
 
         gameServer.onShutdown(function(){
