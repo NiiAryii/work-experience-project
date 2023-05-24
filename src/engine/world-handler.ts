@@ -14,7 +14,7 @@ export interface HubsWorld extends IWorld {
 
 export class WorldHandler extends Schema {
 
-    world: HubsWorld;
+    private world: HubsWorld;
 
     @type({ map: Player })
     players = new MapSchema<Player>();
@@ -37,18 +37,20 @@ export class WorldHandler extends Schema {
         })
     }
 
-    getPlayerBySessionId(sessionId : string) {
-        return this.players.get(sessionId);
+    createEntity(entity : Entity) {
+        const eid = addEntity(this.world);
+        entity.id = eid;
+        this.world.entities.set(eid, entity);
     }
 
-    createPlayer(accountId : string, client : Client) : Player {
+    register(accountId : string, client : Client) : Player {
         const player = new Player(accountId, client);
         this.players.set(client.sessionId, player);
         player.login();
         return player;
     }
   
-    removePlayer(sessionId: string) {
+    unregister(sessionId: string) {
         const player = this.players[sessionId];
         if(player) {
             this.players.delete(sessionId);
@@ -56,11 +58,9 @@ export class WorldHandler extends Schema {
         }
     }
 
-    createEntity(entity : Entity) {
-        const eid = addEntity(this.world);
-        entity.id = eid;
-        this.world.entities.set(eid, entity);
-    }
+    getPlayerBySessionId(sessionId : string) {
+        return this.players.get(sessionId);
+    }  
 
     destroy() : void {
         // TODO handle cleanup

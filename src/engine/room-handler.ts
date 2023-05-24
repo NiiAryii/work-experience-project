@@ -54,7 +54,7 @@ export class RoomHandler extends Room<WorldHandler> {
                 console.error('JWT verification failed:', err);
             } else {
                 const accountId = decoded.account_id;
-                const player = this.worldHandler.createPlayer(accountId, client);
+                const player = this.worldHandler.register(accountId, client);
                 // currently all entities are networked so this only needs to be sent when first player joins
                 if(this.worldHandler.players.size == 1) {
                     this.world.entities.forEach((entity) => {
@@ -68,7 +68,7 @@ export class RoomHandler extends Room<WorldHandler> {
     onLeave (client : Client) {
         const player = this.worldHandler.players[client.sessionId];
         if(player) {
-            this.worldHandler.removePlayer(client.sessionId);
+            this.worldHandler.unregister(client.sessionId);
         }
     }
 
