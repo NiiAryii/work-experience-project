@@ -1,7 +1,6 @@
 import { Client } from "colyseus";
 import { WorldHandler } from "./world-handler";
 
-
 export default class MessageHandler {
 
     private worldHandler : WorldHandler;

@@ -1,4 +1,4 @@
-
+import fs from 'fs';
 import { IWorld, addEntity, createWorld } from 'bitecs'
 import { Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
@@ -22,6 +22,13 @@ export class WorldHandler extends Schema {
     constructor(world: HubsWorld) {
         super();
         this.world = world;
+    }
+
+    load() {
+        const definitions : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
+        definitions.forEach((entity) => {
+            this.createEntity(entity);
+        });
     }
 
     tick() : void {

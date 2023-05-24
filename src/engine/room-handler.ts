@@ -22,13 +22,7 @@ export class RoomHandler extends Room<WorldHandler> {
         this.world.entities = new Map<number, Entity>;
         this.worldHandler = new WorldHandler(this.world)
         this.messageHandler = new MessageHandler(this.worldHandler);
-    }
-
-    loadEntities(worldHandler : WorldHandler) {
-        const definitions : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
-        definitions.forEach((e) => {
-            worldHandler.createEntity(e);
-        });
+        this.worldHandler.load();
     }
 
     onCreate (options : any) {
@@ -37,7 +31,6 @@ export class RoomHandler extends Room<WorldHandler> {
         let tickRate = 500;
 
         this.setState(this.worldHandler);
-        this.loadEntities(this.worldHandler);
         
         this.onMessage("onEntityClicked", (client, data) => this.messageHandler.onEntityClicked(client, data))
         this.onMessage("onEntityHoverEntered", (client, data) => this.messageHandler.onEntityHoverEntered(client, data))
