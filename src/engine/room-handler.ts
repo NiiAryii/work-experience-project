@@ -20,10 +20,10 @@ export class RoomHandler extends Room<WorldHandler> {
         this.world.entities = new Map<number, Entity>;
     }
 
-    loadEntities(state : WorldHandler) {
+    loadEntities(worldHandler : WorldHandler) {
         const definitions : Entity[] = JSON.parse(fs.readFileSync('data/entities.json', 'utf-8'));
         definitions.forEach((e) => {
-            state.createEntity(e);
+            worldHandler.createEntity(e);
         });
     }
 
@@ -72,9 +72,8 @@ export class RoomHandler extends Room<WorldHandler> {
             if (err) {
                 console.error('JWT verification failed:', err);
             } else {
-                const hubId = decoded.hub_id;
-                const player = this.worldHandler.createPlayer(client);
-                player.accountId = decoded.account_id;
+                const accountId = decoded.account_id;
+                const player = this.worldHandler.createPlayer(accountId, client);
                 // currently all entities are networked so this only needs to be sent when first player joins
                 if(this.worldHandler.players.size == 1) {
                     this.world.entities.forEach((entity) => {

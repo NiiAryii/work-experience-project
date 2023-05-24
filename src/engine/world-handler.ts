@@ -30,15 +30,15 @@ export class WorldHandler extends Schema {
         })
     }
 
-    createPlayer(client : Client) : Player {
-        const player = new Player(client);
+    createPlayer(accountId : string, client : Client) : Player {
+        const player = new Player(accountId, client);
         this.players.set(client.sessionId, player);
         player.login();
         return player;
     }
   
     removePlayer(sessionId: string) {
-        const player = this.players.get(sessionId);
+        const player = this.players[sessionId];
         if(player) {
             this.players.delete(sessionId);
             player.logout();

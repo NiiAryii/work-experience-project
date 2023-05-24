@@ -10,9 +10,10 @@ export class Player extends Schema {
     client : Client = null;
     actionSender : ActionSender;
 
-    constructor(client : Client) {
+    constructor(accountId : string, client : Client) {
         super();
         this.client = client;
+        this.accountId = accountId;
         this.actionSender = new ActionSender(this)
     }
 
@@ -29,7 +30,7 @@ export class Player extends Schema {
     }
 
     logout() {
-        console.log("[" + this.accountId + "]: entered the world")
+        console.log("[" + this.accountId + "]: left the world")
     }
 
     tick() : void {
