@@ -32,7 +32,7 @@ export class Player extends Schema {
     logout() {
         console.log("[" + this.accountId + "]: left the world")
     }
-
+    
     tick() : void {
         // tick is called every 500 milliseconds
     }

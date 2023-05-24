@@ -4,6 +4,7 @@ import { Entity, Vector3 } from "../model/entity";
 import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { HubsWorld, WorldHandler } from './world-handler';
+import MessageHandler from './message-handler';
 
 const publicKey = fs.readFileSync('priv/reticulum.key');
 
@@ -13,11 +14,14 @@ export class RoomHandler extends Room<WorldHandler> {
 
     world: HubsWorld = null;
     worldHandler: WorldHandler = null;
+    messageHandler : MessageHandler = null;
 
     constructor() {
         super();
         this.world = createWorld();
         this.world.entities = new Map<number, Entity>;
+        this.worldHandler = new WorldHandler(this.world)
+        this.messageHandler = new MessageHandler(this.worldHandler);
     }
 
     loadEntities(worldHandler : WorldHandler) {
@@ -30,40 +34,24 @@ export class RoomHandler extends Room<WorldHandler> {
     onCreate (options : any) {
 
         let elapsedTime = 0;
-        let fixedTimeStep = 500;
+        let tickRate = 500;
 
-        this.worldHandler = new WorldHandler(this.world)
         this.setState(this.worldHandler);
         this.loadEntities(this.worldHandler);
         
-        this.onMessage("onEntityClicked", (client, data) => {
-            // TODO handle
-        })
+        this.onMessage("onEntityClicked", (client, data) => this.messageHandler.onEntityClicked(client, data))
+        this.onMessage("onEntityHoverEntered", (client, data) => this.messageHandler.onEntityHoverEntered(client, data))
+        this.onMessage("onEntityHoverExit", (client, data) => this.messageHandler.onEntityHoverExit(client, data))
+        this.onMessage("updatePosition", (client, data) => this.messageHandler.onPositionUpdate(client, data));
 
-        this.onMessage("onEntityHoverEntered", (client, data) => { 
-            // TODO handle
-        })
-
-        this.onMessage("onEntityHoverExit", (client, data) => { 
-            // TODO handle
-        })
- 
-        // handle client position updates
-        this.onMessage("updatePosition", (client, data) => {
-            const player = this.worldHandler.players[client.sessionId];
-            if(player) {
-                player.updatePosition(data);
-            }
-        });  
-
-        // fixed tick event 
         this.setSimulationInterval((deltaTime) => {
             elapsedTime += deltaTime;
-            while (elapsedTime >= fixedTimeStep) {
-                elapsedTime -= fixedTimeStep;
+            while (elapsedTime >= tickRate) {
+                elapsedTime -= tickRate;
                 this.worldHandler.tick();
             }
         });
+        
     }
     
     onJoin (client: Client, options: any) {

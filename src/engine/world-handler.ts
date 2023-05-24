@@ -30,6 +30,10 @@ export class WorldHandler extends Schema {
         })
     }
 
+    getPlayerBySessionId(sessionId : string) {
+        return this.players.get(sessionId);
+    }
+
     createPlayer(accountId : string, client : Client) : Player {
         const player = new Player(accountId, client);
         this.players.set(client.sessionId, player);
